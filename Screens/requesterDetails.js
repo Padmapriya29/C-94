@@ -4,20 +4,22 @@ import { Card, Header, Icon } from "react-native-elements";
 import firebase from "firebase";
 import db from "../config";
 import { RFValue } from "react-native-responsive-fontsize";
+import { useRoute } from "@react-navigation/native";
 export default class RequesterDetailsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userId: firebase.auth().currentUser.email,
       userName: "",
-      requesterId: this.props.navigation.route.params("details")["user_id"],
-      requestId: this.props.navigation.route.params("details")["request_id"],
+       
+      requesterId: this.props.route.params.details.user_id,
+      requestId: this.props.route.params.details.user_id,
       helpRequired:
-        this.props.navigation.route.params("details")["help_required"],
+        this.props.route.params.details.help_required,
       reasonForHelp:
-        this.props.navigation.route.params("details")["reason_for_help"],
-      contact: this.props.navigation.route.params("details")["contact_number"],
-      address: this.props.navigation.route.params("details")["address"],
+        this.props.route.params.details.reason_for_help,
+      contact: this.props.route.params.details.contact_number,
+      address: this.props.route.params.details.address,
       receiverName: "",
       receiverRequestDocId: "",
     };
@@ -38,7 +40,7 @@ export default class RequesterDetailsScreen extends React.Component {
 
   getReceiverDetails = () => {
     db.collection("users")
-      .where("userName", "==", this.state.receiverId)
+      .where("userName", "==", this.state.requesterId)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
